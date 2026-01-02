@@ -1,0 +1,47 @@
+// Colors
+$primary-color: #0079bf;
+$secondary-color: #5ba4cf;
+$background-color: #f4f5f7;
+$white: #ffffff;
+$text-primary: #172b4d;
+$text-secondary: #6b778c;
+$border-color: #e4e6eb;
+$hover-color: #e4e6eb;
+$shadow: rgba(0, 0, 0, 0.1);
+
+// Spacing
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+
+// Border radius
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 12px;
+
+// Typography
+$font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+  "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+$font-size-xs: 12px;
+$font-size-sm: 14px;
+$font-size-md: 16px;
+$font-size-lg: 18px;
+$font-size-xl: 24px;
+
+// Breakpoints
+$breakpoint-mobile: 768px;
+$breakpoint-tablet: 1024px;
+$breakpoint-desktop: 1280px;
+
+// Z-index
+$z-index-modal: 1000;
+$z-index-dropdown: 100;
+$z-index-card: 10;
+
+// Dimensions
+$card-height: 32px;
+$list-width: 272px;
+$list-min-width: 272px;
+$header-height: 40px;
