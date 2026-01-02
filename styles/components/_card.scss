@@ -1,2 +1,20 @@
-// Card styles will be added here
+@import "../variables";
+@import "../mixins";
 
+.card {
+  @include card-base;
+  margin-bottom: $spacing-sm;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: darken($white, 2%);
+  }
+
+  p {
+    margin: 0;
+    color: $text-primary;
+    font-size: $font-size-sm;
+    word-wrap: break-word;
+  }
+}
