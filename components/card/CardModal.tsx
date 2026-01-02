@@ -31,7 +31,8 @@ export const CardModal = ({ card, isOpen, onClose }: CardModalProps) => {
       setIsEditingTitle(false);
       setCommentText("");
     }
-  }, [card]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [card?.id]);
 
   useEffect(() => {
     if (isOpen && isEditingTitle && titleInputRef.current) {

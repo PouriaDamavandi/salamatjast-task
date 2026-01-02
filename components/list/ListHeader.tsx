@@ -84,7 +84,7 @@ export const ListHeader = ({ list }: ListHeaderProps) => {
           tabIndex={0}
           aria-label={`List title: ${list.title}. Click to edit.`}
           onKeyDown={(e) => {
-            handleInteraction(e);
+            e.stopPropagation();
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
               handleTitleClick();

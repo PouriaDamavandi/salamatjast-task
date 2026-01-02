@@ -97,6 +97,10 @@ export const loadBoard = (): {
   cards: Card[];
 } | null => {
   try {
+    if (typeof window === "undefined") {
+      return null;
+    }
+
     const stored = localStorage.getItem(STORAGE_KEY);
     if (!stored) {
       return null;
@@ -105,7 +109,8 @@ export const loadBoard = (): {
     const data = JSON.parse(stored);
     return data;
   } catch (error) {
-    console.error("Error loading board from localStorage:", error);
+    // Silently fail and return null to allow fallback to initial board
+    // In production, you might want to log to an error reporting service
     return null;
   }
 };
@@ -115,6 +120,10 @@ export const loadBoard = (): {
  */
 export const saveBoard = (board: Board, lists: List[], cards: Card[]): void => {
   try {
+    if (typeof window === "undefined") {
+      return;
+    }
+
     const data = {
       board,
       lists,
@@ -122,7 +131,10 @@ export const saveBoard = (board: Board, lists: List[], cards: Card[]): void => {
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   } catch (error) {
-    console.error("Error saving board to localStorage:", error);
+    // Handle quota exceeded error or other storage errors
+    if (error instanceof Error && error.name === "QuotaExceededError") {
+      throw new Error("Storage quota exceeded. Please clear some data.");
+    }
     throw new Error("Failed to save board data");
   }
 };
@@ -132,8 +144,12 @@ export const saveBoard = (board: Board, lists: List[], cards: Card[]): void => {
  */
 export const clearBoard = (): void => {
   try {
+    if (typeof window === "undefined") {
+      return;
+    }
     localStorage.removeItem(STORAGE_KEY);
   } catch (error) {
-    console.error("Error clearing board from localStorage:", error);
+    // Silently fail - clearing is not critical
+    // In production, you might want to log to an error reporting service
   }
 };

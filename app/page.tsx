@@ -4,6 +4,9 @@ import { useState } from "react";
 import { Board } from "@/components/board/Board";
 import { ListsContainer } from "@/components/list/ListsContainer";
 import { CardModal } from "@/components/card/CardModal";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { ErrorDisplay } from "@/components/ui/ErrorDisplay";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { useBoard } from "@/hooks/useBoard";
 import { useBoardStore } from "@/store/boardStore";
 import type { Card as CardType } from "@/types";
@@ -28,27 +31,15 @@ export default function Home() {
   };
 
   if (isLoading) {
-    return (
-      <div style={{ padding: "2rem", textAlign: "center" }}>
-        <p>Loading board...</p>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   if (error) {
-    return (
-      <div style={{ padding: "2rem", textAlign: "center", color: "red" }}>
-        <p>Error: {error}</p>
-      </div>
-    );
+    return <ErrorDisplay error={error} />;
   }
 
   if (!board) {
-    return (
-      <div style={{ padding: "2rem", textAlign: "center" }}>
-        <p>No board found</p>
-      </div>
-    );
+    return <EmptyState message="No board found" />;
   }
 
   return (
