@@ -1,4 +1,6 @@
-// Board styles
+@import "../variables";
+@import "../mixins";
+
 .board {
   min-height: 100vh;
   background-color: $background-color;
@@ -13,12 +15,20 @@
   overflow-y: hidden;
 
   @include custom-scrollbar;
+
+  @include mobile {
+    padding: $spacing-md;
+  }
 }
 
 .board-header {
   padding: $spacing-md $spacing-lg;
   background-color: $white;
   border-bottom: 1px solid $border-color;
+
+  @include mobile {
+    padding: $spacing-sm $spacing-md;
+  }
 }
 
 .board-title {
@@ -32,6 +42,11 @@
   display: inline-block;
   min-width: 200px;
   transition: background-color 0.2s ease;
+
+  @include mobile {
+    font-size: $font-size-lg;
+    min-width: 150px;
+  }
 
   &:hover {
     background-color: $hover-color;
@@ -52,4 +67,10 @@
   max-width: 600px;
   border: 2px solid $primary-color;
   background-color: $white;
+
+  @include mobile {
+    font-size: $font-size-lg;
+    min-width: 150px;
+    max-width: 100%;
+  }
 }
