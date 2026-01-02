@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import type { Card as CardType } from "@/types";
@@ -13,8 +13,15 @@ interface CardProps {
 
 export const Card = ({ card, onClick }: CardProps) => {
   const updateCardTitle = useBoardStore((state) => state.updateCardTitle);
+  const cards = useBoardStore((state) => state.cards);
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(card.title);
+
+  const currentCard = cards[card.id] || card;
+
+  useEffect(() => {
+    setTitle(currentCard.title);
+  }, [currentCard.title]);
 
   const {
     attributes,
@@ -48,7 +55,7 @@ export const Card = ({ card, onClick }: CardProps) => {
     if (title.trim()) {
       updateCardTitle(card.id, title.trim());
     } else {
-      setTitle(card.title);
+      setTitle(currentCard.title);
     }
     setIsEditing(false);
   };
@@ -57,7 +64,7 @@ export const Card = ({ card, onClick }: CardProps) => {
     if (e.key === "Enter") {
       e.currentTarget.blur();
     } else if (e.key === "Escape") {
-      setTitle(card.title);
+      setTitle(currentCard.title);
       setIsEditing(false);
     }
     e.stopPropagation();
@@ -95,7 +102,7 @@ export const Card = ({ card, onClick }: CardProps) => {
           onMouseDown={(e) => e.stopPropagation()}
           role="button"
           tabIndex={0}
-          aria-label={`Card: ${card.title}. Click to edit title, double-click to open details.`}
+          aria-label={`Card: ${currentCard.title}. Click to edit title, double-click to open details.`}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
@@ -103,11 +110,13 @@ export const Card = ({ card, onClick }: CardProps) => {
             }
           }}
         >
-          {card.title}
+          {currentCard.title}
         </p>
       )}
-      {card.comments.length > 0 && (
-        <div className="card-comments-badge">{card.comments.length}</div>
+      {currentCard.comments.length > 0 && (
+        <span className="card-comments-badge">
+          {currentCard.comments.length}
+        </span>
       )}
     </div>
   );

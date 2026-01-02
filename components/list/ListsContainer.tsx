@@ -21,7 +21,11 @@ import { List } from "./List";
 import { AddList } from "./AddList";
 import type { List as ListType, Card as CardType } from "@/types";
 
-export const ListsContainer = () => {
+interface ListsContainerProps {
+  onCardClick?: (cardId: string) => void;
+}
+
+export const ListsContainer = ({ onCardClick }: ListsContainerProps) => {
   const { board, lists, cards } = useBoard();
   const reorderLists = useBoardStore((state) => state.reorderLists);
   const reorderCardsInList = useBoardStore((state) => state.reorderCardsInList);
@@ -145,7 +149,14 @@ export const ListsContainer = () => {
               .map((cardId) => cards[cardId])
               .filter((card): card is CardType => card !== undefined);
 
-            return <List key={list.id} list={list} cards={listCards} />;
+            return (
+              <List
+                key={list.id}
+                list={list}
+                cards={listCards}
+                onCardClick={onCardClick}
+              />
+            );
           })}
           <AddList />
         </div>

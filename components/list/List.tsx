@@ -15,9 +15,10 @@ import type { List as ListType, Card as CardType } from "@/types";
 interface ListProps {
   list: ListType;
   cards: CardType[];
+  onCardClick?: (cardId: string) => void;
 }
 
-export const List = ({ list, cards }: ListProps) => {
+export const List = ({ list, cards, onCardClick }: ListProps) => {
   const {
     attributes,
     listeners,
@@ -58,7 +59,11 @@ export const List = ({ list, cards }: ListProps) => {
       <SortableContext items={cardIds} strategy={verticalListSortingStrategy}>
         <div className="list-content">
           {cards.map((card) => (
-            <Card key={card.id} card={card} />
+            <Card
+              key={card.id}
+              card={card}
+              onClick={() => onCardClick?.(card.id)}
+            />
           ))}
         </div>
       </SortableContext>
