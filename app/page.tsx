@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Board } from "@/components/board/Board";
-import { ListsContainer } from "@/components/list/ListsContainer";
-import { CardModal } from "@/components/card/CardModal";
-import { BoardSkeleton } from "@/components/ui/BoardSkeleton";
-import { ErrorDisplay } from "@/components/ui/ErrorDisplay";
-import { useBoard } from "@/hooks/useBoard";
-import { useBoardStore } from "@/store/boardStore";
-import type { Card as CardType } from "@/types";
+import { Board } from "@/features/board/components/Board";
+import { ListsContainer } from "@/features/lists/components/ListsContainer";
+import { CardModal } from "@/features/cards/components/CardModal";
+import { BoardSkeleton } from "@/shared/components/ui/BoardSkeleton";
+import { ErrorDisplay } from "@/shared/components/ui/ErrorDisplay";
+import { useBoard } from "@/shared/hooks/useBoard";
+import { useBoardStore } from "@/shared/store/boardStore";
+import type { Card as CardType } from "@/shared/types";
 
 export default function Home() {
   const { board, isLoading, error } = useBoard();
