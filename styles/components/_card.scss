@@ -4,17 +4,109 @@
 .card {
   @include card-base;
   margin-bottom: $spacing-sm;
-  cursor: pointer;
+  cursor: grab;
+  position: relative;
+  padding: $spacing-sm $spacing-md;
+  min-height: $card-height;
   transition: background-color 0.2s ease;
+
+  &:active {
+    cursor: grabbing;
+  }
 
   &:hover {
     background-color: darken($white, 2%);
   }
 
-  p {
-    margin: 0;
-    color: $text-primary;
-    font-size: $font-size-sm;
-    word-wrap: break-word;
+  &.dragging {
+    opacity: 0.5;
   }
+}
+
+.card-title {
+  margin: 0;
+  color: $text-primary;
+  font-size: $font-size-sm;
+  word-wrap: break-word;
+  cursor: text;
+  padding: $spacing-xs 0;
+
+  &:hover {
+    background-color: $hover-color;
+    border-radius: $border-radius-sm;
+  }
+
+  &:focus {
+    outline: 2px solid $primary-color;
+    outline-offset: 2px;
+  }
+}
+
+.card-title-input {
+  @include input-base;
+  font-size: $font-size-sm;
+  padding: $spacing-xs $spacing-sm;
+  width: 100%;
+  border: 2px solid $primary-color;
+  margin: 0;
+}
+
+.card-comments-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $primary-color;
+  color: $white;
+  border-radius: 12px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 $spacing-xs;
+  font-size: $font-size-xs;
+  font-weight: 600;
+  margin-left: $spacing-sm;
+  margin-top: $spacing-xs;
+}
+
+.add-card-button {
+  @include button-ghost;
+  width: 100%;
+  padding: $spacing-sm;
+  text-align: left;
+  color: $text-secondary;
+  border-radius: $border-radius-sm;
+  margin-top: $spacing-xs;
+
+  &:hover {
+    background-color: $hover-color;
+    color: $text-primary;
+  }
+}
+
+.add-card-form {
+  margin-top: $spacing-xs;
+}
+
+.add-card-input {
+  @include input-base;
+  margin-bottom: $spacing-sm;
+  width: 100%;
+  font-size: $font-size-sm;
+}
+
+.add-card-actions {
+  display: flex;
+  gap: $spacing-sm;
+}
+
+.add-card-submit {
+  @include button-primary;
+  flex: 1;
+  padding: $spacing-sm;
+  font-size: $font-size-sm;
+}
+
+.add-card-cancel {
+  @include button-ghost;
+  padding: $spacing-sm;
+  font-size: $font-size-sm;
 }
