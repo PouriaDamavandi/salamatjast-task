@@ -5,6 +5,7 @@ import { useBoardStore } from "@/store/boardStore";
 import { generateId, getCurrentTimestamp } from "@/utils/helpers";
 import type { Card as CardType, Comment as CommentType } from "@/types";
 import { CommentList } from "./CommentList";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 
 interface CardModalProps {
   card: CardType | null;
@@ -22,6 +23,7 @@ export const CardModal = ({ card, isOpen, onClose }: CardModalProps) => {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showDeleteCardModal, setShowDeleteCardModal] = useState(false);
   const titleInputRef = useRef<HTMLInputElement>(null);
   const commentInputRef = useRef<HTMLTextAreaElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -152,14 +154,20 @@ export const CardModal = ({ card, isOpen, onClose }: CardModalProps) => {
   };
 
   const handleDeleteCard = () => {
-    if (
-      card &&
-      confirm(`Are you sure you want to delete the card "${card.title}"?`)
-    ) {
+    setIsMenuOpen(false);
+    setShowDeleteCardModal(true);
+  };
+
+  const handleConfirmDeleteCard = () => {
+    if (card) {
       deleteCard(card.id);
-      setIsMenuOpen(false);
+      setShowDeleteCardModal(false);
       onClose();
     }
+  };
+
+  const handleCancelDeleteCard = () => {
+    setShowDeleteCardModal(false);
   };
 
   if (!isOpen || !card || !currentCard) {
@@ -274,6 +282,16 @@ export const CardModal = ({ card, isOpen, onClose }: CardModalProps) => {
           </div>
         </div>
       </div>
+      <ConfirmModal
+        isOpen={showDeleteCardModal}
+        title="Delete Card"
+        message={`Are you sure you want to delete the card "${card?.title}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        onConfirm={handleConfirmDeleteCard}
+        onCancel={handleCancelDeleteCard}
+        variant="danger"
+      />
     </div>
   );
 };

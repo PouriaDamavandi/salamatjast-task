@@ -339,3 +339,133 @@
   align-self: flex-start;
   padding: $spacing-sm $spacing-lg;
 }
+
+// Confirm Modal Styles
+.confirm-modal-content {
+  @include card-base;
+  background-color: $white;
+  width: 100%;
+  max-width: 400px;
+  margin: $spacing-xl auto;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15), 0 4px 10px rgba(0, 0, 0, 0.1);
+  animation: modalSlideIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @include mobile {
+    max-width: calc(100% - #{$spacing-md * 2});
+    margin: $spacing-md auto;
+  }
+}
+
+.confirm-modal-header {
+  padding: $spacing-lg $spacing-lg $spacing-md;
+  border-bottom: 1px solid $border-color;
+
+  @include mobile {
+    padding: $spacing-md $spacing-md $spacing-sm;
+  }
+}
+
+.confirm-modal-title {
+  font-size: $font-size-lg;
+  font-weight: 600;
+  color: $text-primary;
+  margin: 0;
+
+  @include mobile {
+    font-size: $font-size-md;
+  }
+}
+
+.confirm-modal-body {
+  padding: $spacing-lg;
+
+  @include mobile {
+    padding: $spacing-md;
+  }
+}
+
+.confirm-modal-message {
+  color: $text-primary;
+  font-size: $font-size-sm;
+  line-height: 1.5;
+  margin: 0;
+  word-wrap: break-word;
+}
+
+.confirm-modal-footer {
+  display: flex;
+  gap: $spacing-sm;
+  padding: $spacing-md $spacing-lg $spacing-lg;
+  border-top: 1px solid $border-color;
+  justify-content: flex-end;
+
+  @include mobile {
+    padding: $spacing-sm $spacing-md $spacing-md;
+    flex-direction: column-reverse;
+  }
+}
+
+.confirm-modal-button {
+  @include button-base;
+  padding: $spacing-sm $spacing-lg;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  border-radius: $border-radius-sm;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+
+  @include mobile {
+    width: 100%;
+    padding: $spacing-sm $spacing-md;
+  }
+}
+
+.confirm-modal-button-cancel {
+  background-color: $white;
+  color: $text-primary;
+  border: 1px solid $border-color;
+
+  &:hover {
+    background-color: $hover-color;
+    border-color: $text-secondary;
+  }
+
+  &:focus {
+    outline: 2px solid $primary-color;
+    outline-offset: 2px;
+  }
+}
+
+.confirm-modal-button-confirm {
+  background-color: $primary-color;
+  color: $white;
+  border: 1px solid $primary-color;
+
+  &:hover {
+    background-color: color.adjust($primary-color, $lightness: -5%);
+    border-color: color.adjust($primary-color, $lightness: -5%);
+  }
+
+  &:focus {
+    outline: 2px solid $primary-color;
+    outline-offset: 2px;
+  }
+}
+
+.confirm-modal-button-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: $white;
+
+  &:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+  }
+
+  &:focus {
+    outline: 2px solid #dc3545;
+    outline-offset: 2px;
+  }
+}

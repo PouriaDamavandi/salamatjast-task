@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import type { List } from "@/types";
 import { useBoardStore } from "@/store/boardStore";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 
 interface ListHeaderProps {
   list: List;
@@ -17,6 +18,8 @@ export const ListHeader = ({ list }: ListHeaderProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(list.title);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showDeleteListModal, setShowDeleteListModal] = useState(false);
+  const [showDeleteAllCardsModal, setShowDeleteAllCardsModal] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -77,9 +80,7 @@ export const ListHeader = ({ list }: ListHeaderProps) => {
 
   const handleDelete = () => {
     setIsMenuOpen(false);
-    if (confirm(`Are you sure you want to delete the list "${list.title}"?`)) {
-      deleteList(list.id);
-    }
+    setShowDeleteListModal(true);
   };
 
   const handleDeleteAllCards = () => {
@@ -88,15 +89,25 @@ export const ListHeader = ({ list }: ListHeaderProps) => {
     if (cardCount === 0) {
       return;
     }
-    if (
-      confirm(
-        `Are you sure you want to delete all ${cardCount} card${
-          cardCount > 1 ? "s" : ""
-        } from "${list.title}"?`
-      )
-    ) {
-      deleteAllCardsFromList(list.id);
-    }
+    setShowDeleteAllCardsModal(true);
+  };
+
+  const handleConfirmDeleteList = () => {
+    deleteList(list.id);
+    setShowDeleteListModal(false);
+  };
+
+  const handleConfirmDeleteAllCards = () => {
+    deleteAllCardsFromList(list.id);
+    setShowDeleteAllCardsModal(false);
+  };
+
+  const handleCancelDeleteList = () => {
+    setShowDeleteListModal(false);
+  };
+
+  const handleCancelDeleteAllCards = () => {
+    setShowDeleteAllCardsModal(false);
   };
 
   const handleMenuToggle = (e: React.MouseEvent) => {
@@ -184,6 +195,28 @@ export const ListHeader = ({ list }: ListHeaderProps) => {
           </div>
         )}
       </div>
+      <ConfirmModal
+        isOpen={showDeleteListModal}
+        title="Delete List"
+        message={`Are you sure you want to delete the list "${list.title}"? This action cannot be undone and will also delete all cards in this list.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        onConfirm={handleConfirmDeleteList}
+        onCancel={handleCancelDeleteList}
+        variant="danger"
+      />
+      <ConfirmModal
+        isOpen={showDeleteAllCardsModal}
+        title="Delete All Cards"
+        message={`Are you sure you want to delete all ${list.cardIds.length} card${
+          list.cardIds.length > 1 ? "s" : ""
+        } from "${list.title}"? This action cannot be undone.`}
+        confirmText="Delete All"
+        cancelText="Cancel"
+        onConfirm={handleConfirmDeleteAllCards}
+        onCancel={handleCancelDeleteAllCards}
+        variant="danger"
+      />
     </div>
   );
 };

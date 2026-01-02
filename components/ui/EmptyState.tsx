@@ -2,12 +2,13 @@
 
 interface EmptyStateProps {
   message: string;
+  className?: string;
 }
 
-export const EmptyState = ({ message }: EmptyStateProps) => {
+export const EmptyState = ({ message, className = "" }: EmptyStateProps) => {
   return (
-    <div style={{ padding: "2rem", textAlign: "center" }}>
-      <p>{message}</p>
+    <div className={`empty-state ${className}`}>
+      <p className="empty-state-message">{message}</p>
     </div>
   );
 };

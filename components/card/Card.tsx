@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, memo, useCallback } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import type { Card as CardType } from "@/types";
@@ -11,18 +11,10 @@ interface CardProps {
   onClick?: () => void;
 }
 
-export const Card = ({ card, onClick }: CardProps) => {
+const CardComponent = ({ card, onClick }: CardProps) => {
   const updateCardTitle = useBoardStore((state) => state.updateCardTitle);
-  const cards = useBoardStore((state) => state.cards);
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(card.title);
-
-  const currentCard = cards[card.id] || card;
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setTitle(currentCard.title);
-  }, [currentCard.title]);
 
   const {
     attributes,
@@ -37,51 +29,65 @@ export const Card = ({ card, onClick }: CardProps) => {
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.6 : 1,
+    transition: isDragging ? undefined : transition,
+    opacity: isDragging ? 0.5 : 1,
   };
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     if (onClick && !isEditing) {
       onClick();
     }
-  };
+  }, [onClick, isEditing]);
 
-  const handleEditClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsEditing(true);
-  };
-
-  const handleEditKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
+  const handleEditClick = useCallback(
+    (e: React.MouseEvent) => {
       e.stopPropagation();
+      setTitle(card.title);
       setIsEditing(true);
-    }
-  };
+    },
+    [card.title]
+  );
 
-  const handleTitleBlur = () => {
+  const handleEditKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        e.stopPropagation();
+        setTitle(card.title);
+        setIsEditing(true);
+      }
+    },
+    [card.title]
+  );
+
+  const handleTitleBlur = useCallback(() => {
     if (title.trim()) {
       updateCardTitle(card.id, title.trim());
     } else {
-      setTitle(currentCard.title);
+      setTitle(card.title);
     }
     setIsEditing(false);
-  };
+  }, [title, card.id, card.title, updateCardTitle]);
 
-  const handleTitleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.currentTarget.blur();
-    } else if (e.key === "Escape") {
-      setTitle(currentCard.title);
-      setIsEditing(false);
-    }
-    e.stopPropagation();
-  };
+  const handleTitleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter") {
+        e.currentTarget.blur();
+      } else if (e.key === "Escape") {
+        setTitle(card.title);
+        setIsEditing(false);
+      }
+      e.stopPropagation();
+    },
+    [card.title]
+  );
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-  };
+  const handleTitleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setTitle(e.target.value);
+    },
+    []
+  );
 
   return (
     <div
@@ -100,7 +106,6 @@ export const Card = ({ card, onClick }: CardProps) => {
           onBlur={handleTitleBlur}
           onKeyDown={handleTitleKeyDown}
           className="card-title-input"
-          onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
           aria-label="Card title"
           autoFocus
@@ -108,7 +113,7 @@ export const Card = ({ card, onClick }: CardProps) => {
       ) : (
         <>
           <div className="card-header">
-            <p className="card-title">{currentCard.title}</p>
+            <p className="card-title">{card.title}</p>
             <button
               type="button"
               className="card-edit-button"
@@ -135,10 +140,10 @@ export const Card = ({ card, onClick }: CardProps) => {
               </svg>
             </button>
           </div>
-          {currentCard.comments.length > 0 && (
+          {card.comments.length > 0 && (
             <div className="card-footer">
               <span className="card-comments-badge">
-                Comments ({currentCard.comments.length})
+                Comments ({card.comments.length})
               </span>
             </div>
           )}
@@ -147,3 +152,5 @@ export const Card = ({ card, onClick }: CardProps) => {
     </div>
   );
 };
+
+export const Card = memo(CardComponent);
