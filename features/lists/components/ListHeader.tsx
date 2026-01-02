@@ -109,11 +109,21 @@ export const ListHeader = ({ list }: ListHeaderProps) => {
   };
 
   const handleInteraction = (e: React.MouseEvent) => {
-    e.stopPropagation();
+    // Only stop propagation for interactive elements (buttons, inputs), not for the header container
+    // This allows list dragging to work from the header area
+    const target = e.target as HTMLElement;
+    if (
+      target.tagName === "BUTTON" ||
+      target.tagName === "INPUT" ||
+      target.closest("button") ||
+      target.closest("input")
+    ) {
+      e.stopPropagation();
+    }
   };
 
   return (
-    <div className="list-header" onMouseDown={handleInteraction}>
+    <div className="list-header">
       {isEditing ? (
         <input
           ref={inputRef}

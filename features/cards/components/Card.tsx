@@ -29,7 +29,7 @@ const CardComponent = ({ card, onClick }: CardProps) => {
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition: isDragging ? undefined : transition,
+    transition: isDragging ? "none" : transition,
     opacity: isDragging ? 0.5 : 1,
   };
 
@@ -154,4 +154,3 @@ const CardComponent = ({ card, onClick }: CardProps) => {
 };
 
 export const Card = memo(CardComponent);
-

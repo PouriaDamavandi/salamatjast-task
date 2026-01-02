@@ -18,9 +18,15 @@ interface ListProps {
   list: ListType;
   cards: CardType[];
   onCardClick?: (cardId: string) => void;
+  isCardDragging?: boolean;
 }
 
-const ListComponent = ({ list, cards, onCardClick }: ListProps) => {
+const ListComponent = ({
+  list,
+  cards,
+  onCardClick,
+  isCardDragging,
+}: ListProps) => {
   const {
     attributes,
     listeners,
@@ -34,6 +40,15 @@ const ListComponent = ({ list, cards, onCardClick }: ListProps) => {
 
   const { setNodeRef: setDroppableRef, isOver } = useDroppable({
     id: `list-droppable-${list.id}`,
+  });
+
+  const { setNodeRef: setStartDroppableRef, isOver: isStartOver } =
+    useDroppable({
+      id: `list-start-${list.id}`,
+    });
+
+  const { setNodeRef: setEndDroppableRef, isOver: isEndOver } = useDroppable({
+    id: `list-end-${list.id}`,
   });
 
   const style = {
@@ -60,13 +75,20 @@ const ListComponent = ({ list, cards, onCardClick }: ListProps) => {
       {...listeners}
     >
       <ListHeader list={list} />
-      <div ref={setDroppableRef}>
+      <div
+        ref={setStartDroppableRef}
+        className={`list-start-drop-zone ${
+          isStartOver && isCardDragging ? "list-start-drop-zone-active" : ""
+        }`}
+      />
+      <div
+        ref={setDroppableRef}
+        className={`list-droppable-area ${
+          isOver && isCardDragging ? "list-droppable-area-active" : ""
+        }`}
+      >
         <SortableContext items={cardIds} strategy={verticalListSortingStrategy}>
-          <div
-            className={`list-content ${
-              isOver && cards.length === 0 ? "list-content-drag-over" : ""
-            }`}
-          >
+          <div className="list-content">
             {cards.length > 0 ? (
               cards.map((card) => (
                 <Card
@@ -78,15 +100,24 @@ const ListComponent = ({ list, cards, onCardClick }: ListProps) => {
             ) : (
               <EmptyState
                 message="No cards yet. Drop a card here or add one below."
-                className={isOver ? "empty-state-drag-over" : ""}
+                className={
+                  isOver && isCardDragging ? "empty-state-drag-over" : ""
+                }
               />
             )}
           </div>
         </SortableContext>
       </div>
-      <AddCard list={list} />
+      <div
+        ref={setEndDroppableRef}
+        className={`list-end-drop-zone ${
+          isEndOver && isCardDragging ? "list-end-drop-zone-active" : ""
+        }`}
+      >
+        <AddCard list={list} />
+      </div>
     </div>
   );
 };
 
-export const List = memo(ListComponent);
+export const List = memo<ListProps>(ListComponent);
