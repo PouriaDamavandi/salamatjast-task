@@ -13,7 +13,7 @@ export const AddCard = ({ list }: AddCardProps) => {
   const addCard = useBoardStore((state) => state.addCard);
   const [isAdding, setIsAdding] = useState(false);
   const [title, setTitle] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (isAdding && inputRef.current) {
@@ -46,15 +46,17 @@ export const AddCard = ({ list }: AddCardProps) => {
     setIsAdding(false);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    e.stopPropagation();
+    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
       handleSubmit();
     } else if (e.key === "Escape") {
       handleCancel();
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTitle(e.target.value);
   };
 
@@ -73,21 +75,23 @@ export const AddCard = ({ list }: AddCardProps) => {
 
   return (
     <div className="add-card-form">
-      <input
+      <textarea
         ref={inputRef}
-        type="text"
         value={title}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         placeholder="Enter a title for this card..."
         className="add-card-input"
         aria-label="Card title"
+        rows={3}
+        autoFocus
       />
       <div className="add-card-actions">
         <button
           onClick={handleSubmit}
           className="add-card-submit"
           type="button"
+          disabled={!title.trim()}
           aria-label="Add card"
         >
           Add Card

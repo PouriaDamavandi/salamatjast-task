@@ -22,12 +22,14 @@
 }
 
 .board-header {
-  padding: $spacing-md $spacing-lg;
+  padding: $spacing-lg $spacing-xl;
   background-color: $white;
   border-bottom: 1px solid $border-color;
+  margin-bottom: $spacing-xl;
 
   @include mobile {
-    padding: $spacing-sm $spacing-md;
+    padding: $spacing-md $spacing-lg;
+    margin-bottom: $spacing-lg;
   }
 }
 

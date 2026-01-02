@@ -108,7 +108,7 @@ export const loadBoard = (): {
 
     const data = JSON.parse(stored);
     return data;
-  } catch (error) {
+  } catch {
     // Silently fail and return null to allow fallback to initial board
     // In production, you might want to log to an error reporting service
     return null;
@@ -132,7 +132,7 @@ export const saveBoard = (board: Board, lists: List[], cards: Card[]): void => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   } catch (error) {
     // Handle quota exceeded error or other storage errors
-    if (error instanceof Error && error.name === "QuotaExceededError") {
+    if (error instanceof DOMException && error.name === "QuotaExceededError") {
       throw new Error("Storage quota exceeded. Please clear some data.");
     }
     throw new Error("Failed to save board data");
@@ -148,7 +148,7 @@ export const clearBoard = (): void => {
       return;
     }
     localStorage.removeItem(STORAGE_KEY);
-  } catch (error) {
+  } catch {
     // Silently fail - clearing is not critical
     // In production, you might want to log to an error reporting service
   }

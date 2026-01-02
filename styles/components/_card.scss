@@ -3,24 +3,40 @@
 
 .card {
   @include card-base;
-  margin-bottom: $spacing-sm;
+  margin-bottom: $spacing-md;
   cursor: grab;
   position: relative;
-  padding: $spacing-sm $spacing-md;
-  min-height: $card-height;
-  transition: background-color 0.2s ease;
+  padding: $spacing-md;
+  min-height: auto;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
 
   &:active {
     cursor: grabbing;
   }
 
   &:hover {
-    background-color: darken($white, 2%);
+    background-color: darken($white, 1%);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
   }
 
   &.dragging {
-    opacity: 0.5;
+    opacity: 0.6;
+    transform: rotate(2deg);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.12);
+    z-index: $z-index-card;
   }
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: $spacing-sm;
+  width: 100%;
+  position: relative;
+  margin-bottom: $spacing-xs;
 }
 
 .card-title {
@@ -28,18 +44,54 @@
   color: $text-primary;
   font-size: $font-size-sm;
   word-wrap: break-word;
-  cursor: text;
-  padding: $spacing-xs 0;
+  line-height: 1.5;
+  padding: 0;
+  flex: 1;
+  min-width: 0;
+}
 
-  &:hover {
+.card-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
+  padding-top: $spacing-xs;
+}
+
+.card-edit-button {
+  @include button-ghost;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $border-radius-sm;
+  color: $text-secondary;
+  opacity: 0;
+  transition: opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  flex-shrink: 0;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  &:hover,
+  &:focus {
     background-color: $hover-color;
-    border-radius: $border-radius-sm;
+    color: $text-primary;
+    opacity: 1;
   }
 
   &:focus {
     outline: 2px solid $primary-color;
     outline-offset: 2px;
   }
+}
+
+.card:hover .card-edit-button {
+  opacity: 1;
 }
 
 .card-title-input {
@@ -49,29 +101,33 @@
   width: 100%;
   border: 2px solid $primary-color;
   margin: 0;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card-comments-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: $primary-color;
-  color: $white;
-  border-radius: 12px;
-  min-width: 20px;
-  height: 20px;
-  padding: 0 $spacing-xs;
+  background-color: $background-color;
+  color: $text-secondary;
+  border-radius: $border-radius-sm;
+  padding: 2px 6px;
   font-size: $font-size-xs;
-  font-weight: 600;
-  margin-left: $spacing-sm;
-  margin-top: $spacing-xs;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: color 0.2s ease, background-color 0.2s ease;
+
+  &:hover {
+    color: $text-primary;
+    background-color: rgba($text-secondary, 0.1);
+  }
 }
 
 .add-card-button {
   @include button-ghost;
   width: 100%;
   padding: $spacing-sm;
-  text-align: left;
+  text-align: start;
   color: $text-secondary;
   border-radius: $border-radius-sm;
   margin-top: $spacing-xs;
@@ -84,29 +140,39 @@
 
 .add-card-form {
   margin-top: $spacing-xs;
+  padding: $spacing-sm;
+  background-color: $white;
+  border-radius: $border-radius-md;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .add-card-input {
   @include input-base;
-  margin-bottom: $spacing-sm;
   width: 100%;
   font-size: $font-size-sm;
+  padding: $spacing-sm $spacing-md;
+  margin-bottom: $spacing-md;
+  resize: vertical;
+  min-height: 60px;
+  font-family: $font-family;
+  line-height: 1.5;
 }
 
 .add-card-actions {
   display: flex;
   gap: $spacing-sm;
+  align-items: center;
 }
 
 .add-card-submit {
   @include button-primary;
   flex: 1;
-  padding: $spacing-sm;
+  padding: $spacing-sm $spacing-md;
   font-size: $font-size-sm;
 }
 
 .add-card-cancel {
   @include button-ghost;
-  padding: $spacing-sm;
+  padding: $spacing-sm $spacing-md;
   font-size: $font-size-sm;
 }

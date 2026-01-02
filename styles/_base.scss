@@ -22,6 +22,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+// RTL Support
+html[dir="rtl"] {
+  direction: rtl;
+}
+
+html[dir="ltr"] {
+  direction: ltr;
+}
+
 button {
   font-family: inherit;
 }

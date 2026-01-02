@@ -37,7 +37,7 @@ export const List = ({ list, cards, onCardClick }: ListProps) => {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : 1,
+    opacity: isDragging ? 0.6 : 1,
   };
 
   const setNodeRef = (node: HTMLDivElement | null) => {
@@ -51,7 +51,7 @@ export const List = ({ list, cards, onCardClick }: ListProps) => {
     <div
       ref={setNodeRef}
       style={style}
-      className="list"
+      className={`list ${isDragging ? "dragging" : ""}`}
       {...attributes}
       {...listeners}
     >

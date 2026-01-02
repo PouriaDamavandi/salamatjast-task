@@ -278,6 +278,42 @@ export const useBoardStore = create<BoardStore>((set, get) => ({
     );
   },
 
+  deleteAllCardsFromList: (listId: string) => {
+    const { board, lists, cards } = get();
+    if (!board || !lists[listId]) return;
+
+    const list = lists[listId];
+    const updatedCards = { ...cards };
+
+    // Delete all cards in this list
+    list.cardIds.forEach((cardId) => {
+      delete updatedCards[cardId];
+    });
+
+    const updatedList: List = {
+      ...list,
+      cardIds: [],
+      updatedAt: new Date().toISOString(),
+    };
+
+    const updatedLists = { ...lists, [listId]: updatedList };
+    const updatedBoard: Board = {
+      ...board,
+      updatedAt: new Date().toISOString(),
+    };
+
+    set({
+      board: updatedBoard,
+      lists: updatedLists,
+      cards: updatedCards,
+    });
+    saveBoard(
+      updatedBoard,
+      Object.values(updatedLists),
+      Object.values(updatedCards)
+    );
+  },
+
   // Comment actions
   addComment: (cardId: string, comment: Comment) => {
     const { board, lists, cards } = get();

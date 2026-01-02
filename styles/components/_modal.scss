@@ -14,6 +14,16 @@
   z-index: $z-index-modal;
   padding: $spacing-lg;
   overflow-y: auto;
+  animation: overlayFadeIn 0.2s ease;
+
+  @keyframes overlayFadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 
   @include custom-scrollbar;
 
@@ -33,6 +43,19 @@
   max-height: calc(100vh - #{$spacing-xl * 2});
   display: flex;
   flex-direction: column;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15), 0 4px 10px rgba(0, 0, 0, 0.1);
+  animation: modalSlideIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @keyframes modalSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
 
   @include mobile {
     max-width: 100%;
@@ -47,10 +70,22 @@
   }
 }
 
-.modal-close-button {
+.modal-header-actions {
   position: absolute;
   top: $spacing-md;
-  right: $spacing-md;
+  inset-inline-end: $spacing-md;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  z-index: 1;
+
+  @include mobile {
+    top: $spacing-sm;
+    inset-inline-end: $spacing-sm;
+  }
+}
+
+.modal-close-button {
   background: none;
   border: none;
   font-size: $font-size-xl;
@@ -78,9 +113,100 @@
 .modal-header {
   padding: $spacing-lg $spacing-lg $spacing-md;
   border-bottom: 1px solid $border-color;
+  position: relative;
 
   @include mobile {
     padding: $spacing-md $spacing-md $spacing-sm;
+  }
+}
+
+.modal-menu-container {
+  position: relative;
+}
+
+.modal-menu-button {
+  @include button-ghost;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $border-radius-sm;
+  color: $text-secondary;
+  transition: background-color 0.2s ease, color 0.2s ease;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    background-color: $hover-color;
+    color: $text-primary;
+  }
+
+  &:focus {
+    outline: 2px solid $primary-color;
+    outline-offset: 2px;
+  }
+}
+
+.modal-menu-dropdown {
+  position: absolute;
+  top: calc(100% + $spacing-xs);
+  inset-inline-end: 0;
+  background-color: $white;
+  border-radius: $border-radius-sm;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 160px;
+  z-index: $z-index-dropdown + 1;
+  overflow: hidden;
+  animation: menuFadeIn 0.15s ease;
+
+  @keyframes menuFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+.modal-menu-item {
+  @include button-ghost;
+  width: 100%;
+  padding: $spacing-sm $spacing-md;
+  text-align: start;
+  font-size: $font-size-sm;
+  color: $text-primary;
+  border-radius: 0;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: $hover-color;
+    color: $text-primary;
+  }
+
+  &:focus {
+    outline: none;
+    background-color: $hover-color;
+  }
+}
+
+.modal-menu-item-danger {
+  color: #dc3545;
+
+  &:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+  }
+
+  &:focus {
+    background-color: rgba(220, 53, 69, 0.1);
   }
 }
 
@@ -159,6 +285,23 @@
   background-color: $background-color;
   border-radius: $border-radius-md;
   padding: $spacing-md;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  animation: commentFadeIn 0.2s ease;
+
+  @keyframes commentFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  &:hover {
+    background-color: darken($background-color, 2%);
+  }
 }
 
 .comment-content {

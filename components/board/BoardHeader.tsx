@@ -12,6 +12,7 @@ export const BoardHeader = () => {
 
   useEffect(() => {
     if (board?.title) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTitle(board.title);
     }
   }, [board?.title]);
@@ -37,6 +38,7 @@ export const BoardHeader = () => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    e.stopPropagation();
     if (e.key === "Enter") {
       inputRef.current?.blur();
     } else if (e.key === "Escape") {

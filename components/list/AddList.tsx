@@ -44,6 +44,7 @@ export const AddList = () => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    e.stopPropagation();
     if (e.key === "Enter") {
       handleSubmit();
     } else if (e.key === "Escape") {

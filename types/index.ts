@@ -59,6 +59,7 @@ export interface BoardActions {
   moveCard: (cardId: string, newListId: string, newIndex: number) => void;
   reorderCardsInList: (listId: string, cardIds: string[]) => void;
   deleteCard: (cardId: string) => void;
+  deleteAllCardsFromList: (listId: string) => void;
 
   // Comment actions
   addComment: (cardId: string, comment: Comment) => void;

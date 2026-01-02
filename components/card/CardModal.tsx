@@ -15,13 +15,16 @@ interface CardModalProps {
 export const CardModal = ({ card, isOpen, onClose }: CardModalProps) => {
   const updateCardTitle = useBoardStore((state) => state.updateCardTitle);
   const addComment = useBoardStore((state) => state.addComment);
+  const deleteCard = useBoardStore((state) => state.deleteCard);
   const cards = useBoardStore((state) => state.cards);
 
   const [title, setTitle] = useState(card?.title || "");
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [commentText, setCommentText] = useState("");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const titleInputRef = useRef<HTMLInputElement>(null);
   const commentInputRef = useRef<HTMLTextAreaElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const currentCard = card ? cards[card.id] : null;
 
@@ -44,7 +47,11 @@ export const CardModal = ({ card, isOpen, onClose }: CardModalProps) => {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {
-        onClose();
+        if (isMenuOpen) {
+          setIsMenuOpen(false);
+        } else {
+          onClose();
+        }
       }
     };
 
@@ -57,7 +64,23 @@ export const CardModal = ({ card, isOpen, onClose }: CardModalProps) => {
       document.removeEventListener("keydown", handleEscape);
       document.body.style.overflow = "unset";
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, isMenuOpen]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMenuOpen]);
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
@@ -79,6 +102,7 @@ export const CardModal = ({ card, isOpen, onClose }: CardModalProps) => {
   };
 
   const handleTitleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    e.stopPropagation();
     if (e.key === "Enter") {
       e.currentTarget.blur();
     } else if (e.key === "Escape") {
@@ -111,6 +135,7 @@ export const CardModal = ({ card, isOpen, onClose }: CardModalProps) => {
   const handleCommentKeyDown = (
     e: React.KeyboardEvent<HTMLTextAreaElement>
   ) => {
+    e.stopPropagation();
     if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
       e.preventDefault();
       handleCommentSubmit();
@@ -121,6 +146,22 @@ export const CardModal = ({ card, isOpen, onClose }: CardModalProps) => {
     setCommentText(e.target.value);
   };
 
+  const handleMenuToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleDeleteCard = () => {
+    if (
+      card &&
+      confirm(`Are you sure you want to delete the card "${card.title}"?`)
+    ) {
+      deleteCard(card.id);
+      setIsMenuOpen(false);
+      onClose();
+    }
+  };
+
   if (!isOpen || !card || !currentCard) {
     return null;
   }
@@ -128,14 +169,49 @@ export const CardModal = ({ card, isOpen, onClose }: CardModalProps) => {
   return (
     <div className="modal-overlay" onClick={handleOverlayClick}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button
-          className="modal-close-button"
-          onClick={onClose}
-          aria-label="Close modal"
-          type="button"
-        >
-          ×
-        </button>
+        <div className="modal-header-actions">
+          <div className="modal-menu-container" ref={menuRef}>
+            <button
+              onClick={handleMenuToggle}
+              className="modal-menu-button"
+              aria-label="Card options"
+              aria-expanded={isMenuOpen}
+              type="button"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle cx="4" cy="8" r="1.5" fill="currentColor" />
+                <circle cx="8" cy="8" r="1.5" fill="currentColor" />
+                <circle cx="12" cy="8" r="1.5" fill="currentColor" />
+              </svg>
+            </button>
+            {isMenuOpen && (
+              <div className="modal-menu-dropdown">
+                <button
+                  onClick={handleDeleteCard}
+                  className="modal-menu-item modal-menu-item-danger"
+                  type="button"
+                  aria-label="Delete card"
+                >
+                  Delete card
+                </button>
+              </div>
+            )}
+          </div>
+          <button
+            className="modal-close-button"
+            onClick={onClose}
+            aria-label="Close modal"
+            type="button"
+          >
+            ×
+          </button>
+        </div>
 
         <div className="modal-header">
           {isEditingTitle ? (
@@ -170,7 +246,9 @@ export const CardModal = ({ card, isOpen, onClose }: CardModalProps) => {
 
         <div className="modal-body">
           <div className="modal-section">
-            <h3 className="modal-section-title">Comments</h3>
+            <h3 className="modal-section-title">
+              Comments ({currentCard.comments.length})
+            </h3>
             <CommentList comments={currentCard.comments} />
             <div className="modal-add-comment">
               <textarea
