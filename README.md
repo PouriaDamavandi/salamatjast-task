@@ -1,6 +1,6 @@
-# 📋 Trello Clone
+# 📋 Trello Task Clone
 
-A full-featured Trello Clone built with Next.js, TypeScript, and SCSS. This project demonstrates modern React development practices, state management, drag & drop functionality, and responsive design.
+A full-featured Trello Task Clone built with Next.js, TypeScript, and SCSS. This project demonstrates modern React development practices, state management, drag & drop functionality, and responsive design.
 
 ## 🎯 Features
 
