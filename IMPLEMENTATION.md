@@ -1,12 +1,12 @@
-# 📋 Trello Clone - Implementation Phasing Guide
+# 📋 Trello Task Clone - Implementation Phasing Guide
 
-This document outlines the complete implementation plan for the Trello Clone project.
+This document outlines the complete implementation plan for the Trello Task Clone project.
 
 ---
 
 ## 🎯 Project Overview
 
-Building a Trello Clone in 1 day with the following requirements:
+Building a Trello Task Clone in 1 day with the following requirements:
 
 - **Framework**: Next.js (App Router)
 - **Language**: TypeScript
@@ -21,7 +21,7 @@ Building a Trello Clone in 1 day with the following requirements:
 ## 📐 Project Structure (Feature-Driven Architecture)
 
 ```text
-salamatjast/
+trello-task-clone/
 ├── app/
 │   ├── layout.tsx
 │   ├── page.tsx

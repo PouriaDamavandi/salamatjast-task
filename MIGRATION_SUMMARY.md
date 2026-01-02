@@ -7,7 +7,7 @@ Your codebase has been successfully refactored from a layer-based architecture t
 ## 📁 New Structure
 
 ```
-salamatjast/
+trello-task-clone/
 ├── app/                          # Next.js app directory
 │   ├── page.tsx                 # Updated with new imports
 │   └── ...

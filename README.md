@@ -85,7 +85,7 @@ A full-featured Trello Task Clone built with Next.js, TypeScript, and SCSS. This
 
    ```bash
    git clone <repository-url>
-   cd salamatjast
+   cd trello-task-clone
    ```
 
 2. **Install dependencies**
@@ -113,66 +113,93 @@ pnpm start
 ## 📁 Project Structure
 
 ```
-salamatjast/
+trello-task-clone/
 ├── app/
 │   ├── layout.tsx          # Root layout component
 │   ├── page.tsx            # Main page component
-│   └── globals.scss        # Global styles (imports all SCSS)
 │
-├── components/
+├── features/                # Feature-based organization
 │   ├── board/
-│   │   ├── Board.tsx       # Main board container
-│   │   └── BoardHeader.tsx # Board header with editable title
+│   │   ├── components/
+│   │   │   ├── Board.tsx       # Main board container
+│   │   │   └── BoardHeader.tsx # Board header with editable title
+│   │   ├── hooks/
+│   │   │   └── useBoardActions.ts
+│   │   ├── services/
+│   │   │   └── boardService.ts
+│   │   └── types/
 │   │
-│   ├── list/
-│   │   ├── List.tsx        # List component (draggable)
-│   │   ├── ListHeader.tsx  # List header with title and delete
-│   │   ├── ListsContainer.tsx # Container for all lists
-│   │   └── AddList.tsx     # Add new list component
+│   ├── lists/
+│   │   ├── components/
+│   │   │   ├── List.tsx        # List component (draggable)
+│   │   │   ├── ListHeader.tsx  # List header with title and delete
+│   │   │   ├── ListsContainer.tsx # Container for all lists
+│   │   │   └── AddList.tsx     # Add new list component
+│   │   ├── hooks/
+│   │   │   └── useListActions.ts
+│   │   ├── services/
+│   │   │   └── listService.ts
+│   │   └── types/
 │   │
-│   ├── card/
-│   │   ├── Card.tsx        # Card component (draggable)
-│   │   ├── CardModal.tsx   # Modal for card details and comments
-│   │   ├── AddCard.tsx     # Add new card component
-│   │   ├── Comment.tsx     # Individual comment component
-│   │   └── CommentList.tsx # List of comments
+│   ├── cards/
+│   │   ├── components/
+│   │   │   ├── Card.tsx        # Card component (draggable)
+│   │   │   ├── CardModal.tsx   # Modal for card details and comments
+│   │   │   └── AddCard.tsx     # Add new card component
+│   │   ├── hooks/
+│   │   │   └── useCardActions.ts
+│   │   ├── services/
+│   │   │   └── cardService.ts
+│   │   └── types/
 │   │
-│   └── ui/
-│       ├── LoadingSpinner.tsx # Loading state component
-│       ├── ErrorDisplay.tsx   # Error state component
-│       └── EmptyState.tsx     # Empty state component
+│   └── comments/
+│       ├── components/
+│       │   ├── Comment.tsx     # Individual comment component
+│       │   └── CommentList.tsx # List of comments
+│       ├── hooks/
+│       │   └── useCommentActions.ts
+│       ├── services/
+│       │   └── commentService.ts
+│       └── types/
 │
-├── hooks/
-│   └── useBoard.ts         # Custom hook for board state
+├── shared/                   # Shared code across features
+│   ├── components/
+│   │   └── ui/               # Reusable UI components
+│   │       ├── BoardSkeleton.tsx
+│   │       ├── ConfirmModal.tsx
+│   │       ├── EmptyState.tsx
+│   │       ├── ErrorDisplay.tsx
+│   │       ├── LoadingSpinner.tsx
+│   │       ├── SkeletonCard.tsx
+│   │       └── SkeletonList.tsx
+│   ├── hooks/
+│   │   └── useBoard.ts       # Custom hook for board state
+│   ├── services/
+│   │   ├── storageService.ts      # localStorage service
+│   │   └── boardInitializationService.ts
+│   ├── store/
+│   │   └── boardStore.ts     # Zustand store for state management
+│   ├── types/
+│   │   ├── index.ts          # TypeScript type definitions
+│   │   └── store.ts          # Store-specific types
+│   └── utils/
+│       ├── helpers.ts        # Helper functions (ID generation, timestamps)
+│       └── formatters.ts     # Formatting utilities (date formatting)
 │
-├── store/
-│   └── boardStore.ts       # Zustand store for state management
-│
-├── services/
-│   └── storageService.ts   # localStorage service
-│
-├── types/
-│   └── index.ts            # TypeScript type definitions
-│
-├── utils/
-│   ├── helpers.ts          # Helper functions (ID generation, timestamps)
-│   └── formatters.ts       # Formatting utilities (date formatting)
-│
-└── styles/
-    ├── globals.scss        # Main SCSS file (imports all partials)
-    ├── _variables.scss     # SCSS variables (colors, spacing, typography)
-    ├── _mixins.scss        # SCSS mixins (buttons, inputs, responsive)
-    ├── _base.scss          # Base/reset styles
-    │
+└── styles/                   # Styles organized by component
+    ├── globals.scss          # Main SCSS file (imports all partials)
+    ├── _variables.scss       # SCSS variables (colors, spacing, typography)
+    ├── _mixins.scss          # SCSS mixins (buttons, inputs, responsive)
+    ├── _base.scss            # Base/reset styles
     ├── components/
-    │   ├── _board.scss     # Board component styles
-    │   ├── _list.scss      # List component styles
-    │   ├── _card.scss      # Card component styles
-    │   └── _modal.scss     # Modal component styles
-    │
+    │   ├── _board.scss       # Board component styles
+    │   ├── _list.scss        # List component styles
+    │   ├── _card.scss        # Card component styles
+    │   ├── _modal.scss       # Modal component styles
+    │   └── _skeleton.scss    # Skeleton component styles
     └── utils/
-        ├── _layout.scss    # Layout utilities
-        └── _utilities.scss # General utilities
+        ├── _layout.scss      # Layout utilities
+        └── _utilities.scss   # General utilities
 ```
 
 ## 🎨 Design & Styling
