@@ -1,3 +1,6 @@
+@use "sass:color";
+@use "variables" as *;
+
 // Responsive mixins
 @mixin mobile {
   @media (max-width: #{$breakpoint-mobile - 1px}) {
@@ -48,7 +51,7 @@
   color: $white;
 
   &:hover {
-    background-color: darken($primary-color, 5%);
+    background-color: color.adjust($primary-color, $lightness: -5%);
   }
 }
 
@@ -58,7 +61,7 @@
   color: $text-primary;
 
   &:hover {
-    background-color: darken($hover-color, 5%);
+    background-color: color.adjust($hover-color, $lightness: -5%);
   }
 }
 

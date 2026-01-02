@@ -1,15 +1,9 @@
-// Import variables first
-@import "variables";
-@import "mixins";
-@import "base";
-
-// Import component styles
-@import "components/board";
-@import "components/list";
-@import "components/card";
-@import "components/modal";
-@import "components/skeleton";
-
-// Import utility styles
-@import "utils/layout";
-@import "utils/utilities";
+// Import all styles using @use
+@use "base";
+@use "utils/layout";
+@use "utils/utilities";
+@use "components/board";
+@use "components/list";
+@use "components/card";
+@use "components/modal";
+@use "components/skeleton";
